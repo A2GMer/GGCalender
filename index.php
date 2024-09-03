@@ -36,13 +36,12 @@
 </html>
 
 <?php
-// データベース接続情報
-$dsn = 'mysql:host=localhost;dbname=GGCalender;charset=utf8';
-$username = 'root';
-$password = 'root';
+
+date_default_timezone_set("Asia/Tokyo");
+require_once('config.php');
 
 try {
-    $pdo = new PDO($dsn, $username, $password);
+    $pdo = new PDO(DSN, DB_USER, DB_PASS);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     echo 'データベース接続失敗: ' . $e->getMessage();
