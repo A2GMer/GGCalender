@@ -40,6 +40,11 @@
 date_default_timezone_set("Asia/Tokyo");
 require_once('config.php');
 
+// キャッシュを無効にするためのヘッダーを設定
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Pragma: no-cache");
+header("Expires: Thu, 01 Jan 1970 00:00:00 GMT");
+
 try {
     $pdo = new PDO(DSN, DB_USER, DB_PASS);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
