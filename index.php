@@ -66,9 +66,9 @@ $query = $pdo->query("SELECT date FROM holidays WHERE MONTH(date) = $month AND Y
 $holidays = $query->fetchAll(PDO::FETCH_COLUMN);
 
 // 休館日を追加する処理
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['day'])) {
-    $day = $_POST['day'];
-    $date = "$year-$month-" . str_pad($day, 2, '0', STR_PAD_LEFT);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['date'])) {
+    // $day = $_POST['day'];
+    $date = $_POST['date'];
 
     // 登録済みかどうか確認
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM holidays WHERE date = ?");
@@ -107,7 +107,7 @@ for ($i = 0; $i < $first_day_of_month; $i++) {
 for ($day = 1; $day <= $total_days; $day++) {
     $date = "$year-$month-".str_pad($day, 2, '0', STR_PAD_LEFT); // 日付を2桁に整形
     $class = in_array($date, $holidays) ? 'holiday' : '';
-    echo "<td class='$class' onclick='confirmHoliday($day)'>$day</td>";
+    echo "<td class='$class' onclick='confirmHoliday($date)'>$day</td>";
     if (($day + $first_day_of_month) % 7 == 0) {
         echo "</tr><tr>";
     }
@@ -124,16 +124,16 @@ echo "</tr></table>";
 ?>
 
 <script>
-function confirmHoliday(day) {
-    if (confirm(day + "日を休館日として登録しますか？")) {
+function confirmHoliday(date) {
+    if (confirm(date + "日を休館日として登録しますか？")) {
         var form = document.createElement('form');
         form.method = 'POST';
         form.action = '';
         
         var input = document.createElement('input');
         input.type = 'hidden';
-        input.name = 'day';
-        input.value = day;
+        input.name = 'date';
+        input.value = date;
         
         form.appendChild(input);
         document.body.appendChild(form);
