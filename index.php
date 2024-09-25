@@ -63,7 +63,7 @@ $holidays = $query->fetchAll(PDO::FETCH_COLUMN);
 // 休館日を追加する処理
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['day'])) {
     $day = $_POST['day'];
-    $date = "$year-$month-$day";
+    $date = "$year-$month-" . str_pad($day, 2, '0', STR_PAD_LEFT);
 
     // 登録済みかどうか確認
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM holidays WHERE date = ?");
@@ -83,6 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['day'])) {
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
 }
+
+// 休館日を再取得（この部分を追加）
+$query = $pdo->query("SELECT date FROM holidays WHERE MONTH(date) = $month AND YEAR(date) = $year");
+$holidays = $query->fetchAll(PDO::FETCH_COLUMN);
 
 // カレンダーの出力
 echo $month . "月";
